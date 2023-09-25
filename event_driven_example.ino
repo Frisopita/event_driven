@@ -42,11 +42,23 @@ void IRAM_ATTR isr() {
 }
 
 void WeatherClick() {
-  Serial.println("Hola");
+  Serial.print("Temperature: ");
+  Serial.print(bme.readTemperature());
+  Serial.print("\n");
+  Serial.print("Humidity: ");
+  Serial.print(bme.readHumidity());
+  Serial.print("\n");
+  Serial.print("Preassure: ");
+  Serial.print(bme.readPressure() / 100.0F);
+  Serial.print("\n");
+  Serial.print("Altitude: ");
+  Serial.print(bme.readAltitude(SEALEVELPRESSURE_HPA));
+  Serial.print("\n");
 }
 
 void HumClick() {
-  Serial.println("Adios");
+  Serial.print(mcp3221.read());
+  Serial.print("\n");
 }
 
 
@@ -94,7 +106,7 @@ void loop() {
     Serial.println("<");
   }
   if (gesture == APDS9960_RIGHT) {
-     Serial.println(">");
+    Serial.println(">");
   }
   //botones
   for (int i = 0; i < sizeof(buttons) / sizeof(buttons[0]); i++) {
@@ -103,12 +115,14 @@ void loop() {
       buttons[i].pressed = false;
       switch (i) {
         case 0:
-          Serial.println("Sensor TEMP");
-          Serial.print(bme.readTemperature());
+          Serial.print("\n");
+          Serial.println("Sensor Weather");
+          WeatherClick();
           break;
         case 1:
+          Serial.print("\n");
           Serial.println("Sensor HUM");
-          Serial.print(mcp3221.read());
+          HumClick();    
           break;
         default:
           Serial.println("None");
